@@ -21,6 +21,10 @@ const DeviceInfoSection = ({device, lastRecord}: { device: Device; lastRecord: R
                 <span>Hydroponic</span>
             </li>
             <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">Device Target</span>
+                <span className="text-right">{device.target}</span>
+            </li>
+            <li className="flex items-center justify-between">
                 <span className="text-muted-foreground">Device ID</span>
                 <span>{device.id}</span>
             </li>
@@ -41,7 +45,15 @@ const DeviceStatusSection = ({device}: { device: Device }) => (
         </div>
         <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Relay Status</span>
-            <RelayStatus relays={device.configs} />
+            <RelayStatus relays={device.configs.relays}/>
+        </div>
+        <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">A</span>
+            <span>{device.configs.solvents.a} mL</span>
+        </div>
+        <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">B</span>
+            <span>{device.configs.solvents.b} mL</span>
         </div>
     </div>
 );
@@ -66,17 +78,17 @@ const RelayStatus = ({relays}: { relays: any }) => (
 const LastRetrievedDataSection = ({lastRecord}: { lastRecord: Record | null }) => (
     <div className={`grid gap-3`}>
         <div className="font-semibold">Last Retrieved Data</div>
-        <DataItem label="Acidity (pH)" value={`${lastRecord?.ph!}`} />
-        <DataItem label="Temperature" value={`${lastRecord?.temp} °C`} />
-        <DataItem label="Humidity" value={`${lastRecord?.hum}%`} />
-        <DataItem label="Total Dissolved Solids" value={`${lastRecord?.tds} ppm`} />
+        <DataItem label="Acidity (pH)" value={lastRecord ? `${lastRecord.ph}` : 'N/A'}/>
+        <DataItem label="Temperature" value={lastRecord ? `${lastRecord.temp} °C` : 'N/A'}/>
+        <DataItem label="Humidity" value={lastRecord ? `${lastRecord.hum}%` : 'N/A'}/>
+        <DataItem label="Total Dissolved Solids" value={lastRecord ? `${Math.floor(lastRecord.tds)} ppm` : 'N/A'}/>
     </div>
 );
 
 const DataItem = ({label, value}: { label: string; value: string | undefined }) => (
     <div className="flex items-center justify-between">
         <span className="text-muted-foreground">{label}</span>
-        <span>{value}</span>
+        <span className='text-right'>{value}</span>
     </div>
 );
 
@@ -90,11 +102,11 @@ export default function DeviceDetailsCard({device, lastRecord}: DeviceDetailsCar
                 </div>
             </CardHeader>
             <CardContent className="text-sm">
-                <DeviceInfoSection device={device} lastRecord={lastRecord} />
-                <Separator className="my-4" />
-                <DeviceStatusSection device={device} />
-                <Separator className="my-4" />
-                <LastRetrievedDataSection lastRecord={lastRecord} />
+                <DeviceInfoSection device={device} lastRecord={lastRecord}/>
+                <Separator className="my-4"/>
+                <DeviceStatusSection device={device}/>
+                <Separator className="my-4"/>
+                <LastRetrievedDataSection lastRecord={lastRecord}/>
             </CardContent>
         </Card>
     );

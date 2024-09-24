@@ -7,10 +7,12 @@ import {GaugeIcon} from "lucide-react";
 type DeviceCardProps = {
     id: string;
     name: string;
+    target: string;
     lastUpdated: string;
 };
 
-export default function DeviceCard({id, name, lastUpdated}: DeviceCardProps) {
+export default function DeviceCard(props: DeviceCardProps) {
+    const {id, name, target, lastUpdated} = props;
     return (
         <Link href={`/device/${id}`} key={id}>
             <Card>
@@ -20,8 +22,8 @@ export default function DeviceCard({id, name, lastUpdated}: DeviceCardProps) {
                             <GaugeIcon className="w-5 h-5"/>
                         </div>
                         <div>
-                            <div className="font-medium">{name}</div>
-                            <div className="text-sm text-muted-foreground">{id}</div>
+                            <div className="font-medium">{`${name} #${id}`}</div>
+                            <div className="text-sm text-muted-foreground">{target}</div>
                         </div>
                     </div>
                 </CardHeader>
@@ -30,7 +32,7 @@ export default function DeviceCard({id, name, lastUpdated}: DeviceCardProps) {
                     <div className="text-sm text-muted-foreground">
                         {lastUpdated !== "N/A" ? formatDateDifference(lastUpdated) : "N/A"}
                     </div>
-                    <Badge variant="destructive">High Temperature</Badge>
+                    {/*<Badge variant="destructive">High Temperature</Badge>*/}
                 </CardFooter>
             </Card>
         </Link>

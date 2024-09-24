@@ -36,7 +36,13 @@ export function mapDeviceRecordToObject(records: Record[]) {
 }
 
 export function getHour(value: string) {
-    return new Date(value).toLocaleTimeString('id-ID', {
+    const [date, time] = value.split(" ");
+    const [day, month, year] = date.split("-");
+    const isoFormatDateStr = `${year}-${month}-${day}T${time}`;
+    const dateObj = new Date(isoFormatDateStr);
+
+    const isoStringDate = dateObj.toISOString();
+    return new Date(isoStringDate).toLocaleTimeString('id-ID', {
         hour: '2-digit',
         minute: '2-digit'
     })

@@ -10,11 +10,11 @@ export default function MonitoringLogActivity({setDate, filteredRecords}: Monito
     return (
         <Card className={'flex-1'}>
             <CardHeader className={'flex flex-row w-full justify-between'}>
-                <div className="grid gap-0.5">
+                <div className="grid gap-1">
                     <CardTitle>Monitoring logs</CardTitle>
                     <CardDescription>Showing logs for the last 24 hours</CardDescription>
                 </div>
-                <DatePickerWithPresets onDateChange={(selectedDate) => setDate(selectedDate.toISOString())}/>
+                <DatePickerWithPresets onDateChange={(selectedDate) => setDate(selectedDate.toLocaleDateString())}/>
             </CardHeader>
             <CardContent>
                 <DataTable columns={monitoringDatatableColumns} data={filteredRecords}/>

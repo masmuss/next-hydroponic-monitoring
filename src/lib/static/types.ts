@@ -3,6 +3,7 @@ export type Devices = {
         configs: Config;
         id: string;
         name: string;
+        target: string;
         records: Record[];
     };
 };
@@ -11,14 +12,21 @@ export type Device = {
     configs: Config;
     id: string;
     name: string;
+    target: string;
     records: Record[];
 };
 
 export type Config = {
-    relay1: boolean;
-    relay2: boolean;
-    relay3: boolean;
-    relay4: boolean;
+    solvents : {
+        a: number;
+        b: number;
+    },
+    relays: {
+        relay1: boolean;
+        relay2: boolean;
+        relay3: boolean;
+        relay4: boolean;
+    }
 }
 
 export type Record = {

@@ -14,7 +14,7 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
     const [device, setDevice] = useState<Device | null>(null);
     const [filteredRecords, setFilteredRecords] = useState<DeviceRecords[]>([]);
     const [lastRecord, setLastRecord] = useState<DeviceRecords | null>(null);
-    const [date, setDate] = useState<string>(new Date().toISOString());
+    const [date, setDate] = useState<string>(new Date().toLocaleDateString());
 
     useEffect(() => {
         getDeviceDetailStream(params.id, setDevice);
@@ -27,7 +27,7 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
     const {phMap, tempMap, humMap, tdsMap} = mapDeviceRecordToObject(filteredRecords);
 
     return (
-        <div className={'px-6 pt-6 space-y-4'}>
+        <div className={'p-6 space-y-4'}>
             <header>
                 <h1 className="font-bold text-4xl">Device Monitoring</h1>
             </header>

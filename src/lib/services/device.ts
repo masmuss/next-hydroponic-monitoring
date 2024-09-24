@@ -1,105 +1,3 @@
-// import {realtimeDatabase} from "@/lib/config/firebase";
-// import {
-//     Database,
-//     DatabaseReference,
-//     DataSnapshot,
-//     get,
-//     getDatabase,
-//     limitToLast,
-//     orderByChild,
-//     Query,
-//     query,
-//     ref
-// } from "firebase/database";
-// import {Device, Record} from "@/lib/static/types";
-//
-// type DevicesList = {
-//     [deviceId: string]: {
-//         id: string;
-//         name: string;
-//         lastUpdated: string;
-//     };
-// }
-//
-// export function getDevicesList(): Promise<DevicesList> {
-//     const db: Database = getDatabase();
-//     const devicesRef: DatabaseReference = ref(db, 'devices');
-//
-//     const snapshot: DataSnapshot = get(devicesRef);
-//
-//     if (snapshot.exists()) {
-//         const devicesData = snapshot.val();
-//
-//         return Object.keys(devicesData).reduce((acc, deviceId) => {
-//             const device = devicesData[deviceId];
-//             acc[deviceId] = {
-//                 id: device.id,
-//                 name: device.name,
-//                 lastUpdated: device.records ? device.records[device.records.length - 1].datetime : "N/A"
-//             };
-//             return acc;
-//         }, {} as DevicesList);
-//     } else {
-//         return {};
-//     }
-// }
-//
-// export function countAllDevices(): Promise<number> {
-//     const devicesRef: DatabaseReference = ref(realtimeDatabase, "devices");
-//     const snapshot: DataSnapshot = get(devicesRef);
-//
-//     if (snapshot.exists()) {
-//         const devices = snapshot.val();
-//         return Object.keys(devices).length;
-//     } else {
-//         return 0;
-//     }
-// }
-//
-// export function getLatestDeviceRecord(deviceId: string): Promise<Record | null> {
-//     const recordsRef: DatabaseReference = ref(realtimeDatabase, `devices/${deviceId}/records`);
-//     const latestRecordQuery: Query = query(recordsRef, orderByChild("datetime"), limitToLast(1));
-//
-//     const snapshot: DataSnapshot = get(latestRecordQuery);
-//
-//     if (snapshot.exists()) {
-//         const records = snapshot.val();
-//         const latestRecord = Object.values(records)[0];
-//         return latestRecord as Record;
-//     } else {
-//         return null;
-//     }
-// }
-//
-// export function getDeviceRecordDataStream(deviceId: string, date: string): Record[] {
-//     const recordsRef: DatabaseReference = ref(realtimeDatabase, `devices/${deviceId}/records`);
-//     const formattedDate = date.split("T")[0];
-//
-//     const snapshot: DataSnapshot = get(recordsRef);
-//
-//     if (snapshot.exists()) {
-//         const records = snapshot.val();
-//
-//         // Convert the records to an array, filter by date, and sort by datetime
-//         return Object.values(records)
-//             .filter((record) => (record as Record).datetime.includes(formattedDate))
-//             .sort((a, b) => new Date((a as Record).datetime).getTime() - new Date((b as Record).datetime).getTime()) as Record[];
-//     } else {
-//         return [];
-//     }
-// }
-//
-// export function getDeviceDetailStream(deviceId: string): Promise<Device | null> {
-//     const deviceRef: DatabaseReference = ref(realtimeDatabase, `devices/${deviceId}`);
-//     const snapshot: DataSnapshot = get(deviceRef);
-//
-//     if (snapshot.exists()) {
-//         return snapshot.val() as Device;
-//     } else {
-//         return null;
-//     }
-// }
-
 import {realtimeDatabase} from "@/lib/config/firebase";
 import {DatabaseReference, DataSnapshot, limitToLast, onValue, orderByChild, query, ref} from "firebase/database";
 import {Device, Record} from "@/lib/static/types";
@@ -108,6 +6,7 @@ type DevicesList = {
     [deviceId: string]: {
         id: string;
         name: string;
+        target: string;
         lastUpdated: string;
     };
 }
@@ -123,6 +22,7 @@ export function getDevicesList(callback: (devices: DevicesList) => void) {
                 acc[deviceId] = {
                     id: device.id,
                     name: device.name,
+                    target: device.target,
                     lastUpdated: device.records ? device.records[device.records.length - 1].datetime : "N/A"
                 };
                 return acc;
@@ -146,7 +46,7 @@ export function countAllDevices(callback: (count: number) => void) {
             callback(0);
         }
     });
-};
+}
 
 export function getLatestDeviceRecord(deviceId: string, callback: (latestRecord: Record | null) => void) {
     const recordsRef = ref(realtimeDatabase, `devices/${deviceId}/records`);
@@ -164,15 +64,28 @@ export function getLatestDeviceRecord(deviceId: string, callback: (latestRecord:
             callback(null);
         }
     });
-};
+}
 
 export function getDeviceRecordDataStream(deviceId: string, date: string, callback: (data: Record[]) => void) {
     const recordsRef = ref(realtimeDatabase, `devices/${deviceId}/records`);
-    const formattedDate = date.split("T")[0];
+    console.log(date)
+    const dateObj = new Date(date.split("T")[0]);
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+
+    const formattedDate = `${day}-${month}-${year}`;
+    console.log(formattedDate);
 
     onValue(recordsRef, (snapshot) => {
         if (snapshot.exists()) {
             const records = snapshot.val();
+
+            if (!records) {
+                callback([]);
+                return;
+            }
+
             const dailyRecords = records.filter((record: Record) => {
                 return record.datetime.includes(formattedDate);
             });
@@ -181,7 +94,7 @@ export function getDeviceRecordDataStream(deviceId: string, date: string, callba
             callback([]);
         }
     });
-};
+}
 
 export function getDeviceDetailStream(deviceId: string, callback: (data: Device) => void) {
     const deviceRef: DatabaseReference = ref(realtimeDatabase, `devices/${deviceId}`);

@@ -9,6 +9,7 @@ type DevicesList = {
     [deviceId: string]: {
         id: string;
         name: string;
+        target: string;
         lastUpdated: string;
     };
 }
@@ -23,12 +24,12 @@ export default function DeviceList() {
     }, []);
 
     return (
-        <div className={'flex flex-col text-sm gap-4'}>
+        <div className={'flex flex-wrap text-sm gap-4'}>
             {devices ? (
                 Object.keys(devices).map((deviceId) => {
                     const device = devices[deviceId];
                     return (
-                        <DeviceCard key={device.id} id={device.id} name={device.name} lastUpdated={device.lastUpdated}/>
+                        <DeviceCard key={device.id} id={device.id} name={device.name} target={device.target} lastUpdated={device.lastUpdated}/>
                     );
                 })
             ) : (
