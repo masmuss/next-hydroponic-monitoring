@@ -37,7 +37,7 @@ export function mapDeviceRecordToObject(records: Record[]) {
 
 export function getHour(value: string) {
     const [date, time] = value.split(" ");
-    const [day, month, year] = date.split("-");
+    const [year, month, day] = date.split("-");
     const isoFormatDateStr = `${year}-${month}-${day}T${time}`;
     const dateObj = new Date(isoFormatDateStr);
 

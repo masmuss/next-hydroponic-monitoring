@@ -23,15 +23,15 @@ export default function DashboardView(props: DashboardViewProps) {
                         linkHref={'/monitors'}
                     />
                 </div>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Recent Device Activity</CardTitle>
-                        <CardDescription>Monitor the status of your IoT devices</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <DashboardReportTable/>
-                    </CardContent>
-                </Card>
+                {/*<Card>*/}
+                {/*    <CardHeader>*/}
+                {/*        <CardTitle>Recent Device Activity</CardTitle>*/}
+                {/*        <CardDescription>Monitor the status of your IoT devices</CardDescription>*/}
+                {/*    </CardHeader>*/}
+                {/*    <CardContent>*/}
+                {/*        <DashboardReportTable/>*/}
+                {/*    </CardContent>*/}
+                {/*</Card>*/}
             </main>
         </div>
     );

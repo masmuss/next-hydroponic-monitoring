@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {Device, Record as DeviceRecords} from "@/lib/static/types";
 import {getDeviceDetailStream, getDeviceRecordDataStream, getLatestDeviceRecord} from "@/lib/services/device";
-import {mapDeviceRecordToObject} from "@/lib/utils";
+import {cn, mapDeviceRecordToObject} from "@/lib/utils";
 import {chartConfigs} from "@/lib/config/chart";
 import MonitoringChart from "@/components/partials/monitoring/monitoring-chart";
 import Loading from "@/components/loading";
@@ -28,15 +28,18 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
 
     return (
         <div className={'p-6 space-y-4'}>
-            <header>
-                <h1 className="font-bold text-4xl">Device Monitoring</h1>
+            <header className={'mb-4 md:mb-2'}>
+                <h1 className={cn('font-semibold text-2xl', 'md:font-bold md:text-4xl')}>Device Monitoring</h1>
             </header>
-            <div className="flex flex-row-reverse gap-4">
+            <div className={cn(
+                'flex flex-col-reverse',
+                'md:flex-row-reverse gap-4'
+            )}>
                 <MonitoringLogActivity setDate={setDate} filteredRecords={filteredRecords}/>
                 <DeviceDetailsCard device={device} lastRecord={lastRecord}/>
             </div>
             <div className="w-full flex flex-col gap-4">
-                <div className="w-full flex gap-4">
+                <div className={cn('w-full flex flex-col gap-2', 'md:flex-row md:gap-4')}>
                     <MonitoringChart
                         title="Temperature"
                         data={tempMap}
@@ -48,7 +51,7 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
                         config={chartConfigs.humidity}
                     />
                 </div>
-                <div className="w-full flex gap-4">
+                <div className={cn('w-full flex flex-col gap-2', 'md:flex-row md:gap-4')}>
                     <MonitoringChart
                         title="Acidity"
                         data={phMap}

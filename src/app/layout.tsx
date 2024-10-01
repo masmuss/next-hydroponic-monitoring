@@ -30,13 +30,13 @@ export default function RootLayout({children}: Readonly<{
     return (
         <html lang="en">
         <body className={cn(robotoMono.className, 'min-h-screen')} suppressHydrationWarning>
-        <MainWrapper
-            defaultLayout={defaultLayout}
-            defaultCollapsed={defaultCollapsed}
-            navCollapsedSize={3}
-        >
+        {/*<MainWrapper*/}
+        {/*    defaultLayout={defaultLayout}*/}
+        {/*    defaultCollapsed={defaultCollapsed}*/}
+        {/*    navCollapsedSize={3}*/}
+        {/*>*/}
             {children}
-        </MainWrapper>
+        {/*</MainWrapper>*/}
         </body>
         </html>
     );

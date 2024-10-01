@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {formatDateDifference} from "@/lib/utils";
+import {cn, formatDateDifference} from "@/lib/utils";
 import {Device, Record} from "@/lib/static/types";
 import {Badge} from "@/components/ui/badge";
 import {Separator} from "@/components/ui/separator";
@@ -94,7 +94,10 @@ const DataItem = ({label, value}: { label: string; value: string | undefined }) 
 
 export default function DeviceDetailsCard({device, lastRecord}: DeviceDetailsCardProps) {
     return (
-        <Card className="w-1/4">
+        <Card className={cn(
+            'w-full',
+            'md:w-1/4'
+        )}>
             <CardHeader>
                 <div className="grid gap-1">
                     <CardTitle>Device Details</CardTitle>

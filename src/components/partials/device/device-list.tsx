@@ -24,7 +24,7 @@ export default function DeviceList() {
     }, []);
 
     return (
-        <div className={'flex flex-wrap text-sm gap-4'}>
+        <div className={'w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 text-sm gap-4'}>
             {devices ? (
                 Object.keys(devices).map((deviceId) => {
                     const device = devices[deviceId];

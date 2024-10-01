@@ -68,14 +68,12 @@ export function getLatestDeviceRecord(deviceId: string, callback: (latestRecord:
 
 export function getDeviceRecordDataStream(deviceId: string, date: string, callback: (data: Record[]) => void) {
     const recordsRef = ref(realtimeDatabase, `devices/${deviceId}/records`);
-    console.log(date)
     const dateObj = new Date(date.split("T")[0]);
     const day = String(dateObj.getDate()).padStart(2, '0');
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
     const year = dateObj.getFullYear();
 
-    const formattedDate = `${day}-${month}-${year}`;
-    console.log(formattedDate);
+    const formattedDate = `${year}-${month}-${day}`;
 
     onValue(recordsRef, (snapshot) => {
         if (snapshot.exists()) {

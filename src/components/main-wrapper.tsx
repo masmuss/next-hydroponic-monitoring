@@ -19,7 +19,7 @@ interface MailProps {
 }
 
 export default function MainWrapper({
-                                        defaultLayout = [20, 32, 48],
+                                        defaultLayout = [20, 32 ],
                                         defaultCollapsed = false,
                                         navCollapsedSize,
                                         children,
@@ -95,8 +95,8 @@ export default function MainWrapper({
                         ]}
                     />
                 </ResizablePanel>
-                <ResizableHandle withHandle/>
-                <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+                {/*<ResizableHandle withHandle/>*/}
+                <ResizablePanel defaultSize={defaultLayout[2]} minSize={10}>
                     <ScrollArea className={'h-screen bg-muted/80'}>
                         {children}
                     </ScrollArea>

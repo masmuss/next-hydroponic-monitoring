@@ -19,15 +19,15 @@ export function DataTablePagination<TData>({
     return (
         <div className="flex items-center justify-end px-2">
             <div className="flex items-center space-x-6 lg:space-x-8">
-                <div className="flex items-center space-x-2">
-                    <p className="text-sm">Rows per page</p>
+                <div className="flex flex-col md:flex-row items-start md:items-center md:space-x-2">
+                    <p className="whitespace-nowrap text-xs md:text-sm">Rows per page</p>
                     <Select
                         value={`${table.getState().pagination.pageSize}`}
                         onValueChange={(value) => {
                             table.setPageSize(Number(value))
                         }}
                     >
-                        <SelectTrigger className="h-8 w-[70px]">
+                        <SelectTrigger className="h-7 w-[60px] md:h-8 md:w-[70px]">
                             <SelectValue placeholder={table.getState().pagination.pageSize} />
                         </SelectTrigger>
                         <SelectContent side="top">
@@ -39,14 +39,14 @@ export function DataTablePagination<TData>({
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="flex w-[100px] items-center justify-center text-sm">
+                <div className="flex w-[100px] items-center justify-center text-xs md:text-sm whitespace-nowrap">
                     Page {table.getState().pagination.pageIndex + 1} of{" "}
                     {table.getPageCount()}
                 </div>
                 <div className="flex items-center space-x-2">
                     <Button
                         variant="outline"
-                        className="hidden h-8 w-8 p-0 lg:flex"
+                        className="hidden h-4 w-4 md:h-8 md:w-8 p-0 lg:flex"
                         onClick={() => table.setPageIndex(0)}
                         disabled={!table.getCanPreviousPage()}
                     >
@@ -55,7 +55,7 @@ export function DataTablePagination<TData>({
                     </Button>
                     <Button
                         variant="outline"
-                        className="h-8 w-8 p-0"
+                        className="h-4 w-4 md:h-8 md:w-8 p-0"
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
@@ -64,7 +64,7 @@ export function DataTablePagination<TData>({
                     </Button>
                     <Button
                         variant="outline"
-                        className="h-8 w-8 p-0"
+                        className="h-4 w-4 md:h-8 md:w-8 p-0"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >

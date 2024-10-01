@@ -1,7 +1,7 @@
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart";
 import {Card, CardContent, CardHeader} from "@/components/ui/card";
 import {CartesianGrid, Line, LineChart, XAxis, YAxis} from "recharts";
-import {getHour} from "@/lib/utils";
+import {cn, getHour} from "@/lib/utils";
 import React from "react";
 
 type MonitoringChartProps = {
@@ -21,14 +21,14 @@ export default function MonitoringChart(props: MonitoringChartProps) {
 
     return (
         <Card className="w-full">
-            <CardHeader className="text-2xl font-semibold">{title}</CardHeader>
+            <CardHeader className={cn('font-semibold', 'md:text-2xl')}>{title}</CardHeader>
             <CardContent>
                 {
                     data.length === 0 ? (
-                        <p className="text-center">No data available for {title}</p>
+                        <p className="text-sm md:text-base text-center">No data available for {title}</p>
                     ) : (
-                        <ChartContainer config={config} className="min-h-[200px] w-full">
-                            <LineChart accessibilityLayer data={data}>
+                        <ChartContainer config={config} className="w-full">
+                            <LineChart accessibilityLayer data={data} className={''}>
                                 <CartesianGrid vertical={false}/>
                                 <XAxis dataKey="time" tickFormatter={getHour} tickLine={true} axisLine={true}/>
                                 <YAxis tickLine={true} axisLine={true}/>

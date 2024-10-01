@@ -14,7 +14,7 @@ type DeviceCardProps = {
 export default function DeviceCard(props: DeviceCardProps) {
     const {id, name, target, lastUpdated} = props;
     return (
-        <Link href={`/device/${id}`} key={id}>
+        <Link href={`/device/${id}`} key={id} className={'w-full'}>
             <Card>
                 <CardHeader>
                     <div className="flex items-center gap-3">
