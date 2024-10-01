@@ -5,6 +5,8 @@ import {Device, Record} from "@/lib/static/types";
 import {Badge} from "@/components/ui/badge";
 import {Separator} from "@/components/ui/separator";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import {Switch} from "@/components/ui/switch";
+import {changeDeviceRelayStatus} from "@/lib/services/device";
 
 type DeviceDetailsCardProps = { device: Device; lastRecord: Record | null }
 
@@ -45,7 +47,7 @@ const DeviceStatusSection = ({device}: { device: Device }) => (
         </div>
         <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Relay Status</span>
-            <RelayStatus relays={device.configs.relays}/>
+            <RelayStatus relays={device.configs.relays} deviceId={device.id}/>
         </div>
         <div className="flex items-center justify-between">
             <span className="text-muted-foreground">A</span>
@@ -58,14 +60,19 @@ const DeviceStatusSection = ({device}: { device: Device }) => (
     </div>
 );
 
-const RelayStatus = ({relays}: { relays: any }) => (
+const RelayStatus = ({relays, deviceId}: { relays: any, deviceId: string }) => (
     <div className="flex gap-1">
         {Object.keys(relays).map((relayKey, index) => (
             <TooltipProvider key={relayKey}>
                 <Tooltip>
-                    <TooltipTrigger
-                        className={`w-3 h-3 rounded-full ${relays[relayKey] ? 'bg-primary' : 'bg-secondary'}`}
-                    />
+                    <TooltipTrigger>
+                        <Switch
+                            checked={relays[relayKey]}
+                            onCheckedChange={
+                                (checked) => changeDeviceRelayStatus(deviceId, relayKey, checked)
+                            }
+                        />
+                    </TooltipTrigger>
                     <TooltipContent>
                         {`Relay ${index + 1}: ${relays[relayKey] ? 'ON' : 'OFF'}`}
                     </TooltipContent>
