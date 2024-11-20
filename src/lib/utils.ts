@@ -1,6 +1,7 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
-import {Record} from "@/lib/static/types";
+import * as XLSX from 'xlsx'
+import {Record} from "@/lib/static/types"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -34,55 +35,6 @@ export function mapDeviceRecordToObject(records: Record[]) {
         fieldTdsMap
     }
 }
-
-// export function mapDeviceRecordToObject(records: Record[]) {
-//     const groupByHour = (data: { time: string; value: number | null }[], variableName: string) => {
-//         const hourlyGroups: { [hour: string]: number[] } = {};
-//
-//         data.forEach((item) => {
-//             if (!item.time || item.value == null) return;
-//
-//             const hour = new Date(item.time).getHours().toString().padStart(2, '0');
-//             if (!hourlyGroups[hour]) {
-//                 hourlyGroups[hour] = [];
-//             }
-//             hourlyGroups[hour].push(item.value);
-//         });
-//
-//         return Object.keys(hourlyGroups).map(hour => {
-//             const values = hourlyGroups[hour];
-//             const average = values.reduce((sum, value) => sum + value, 0) / values.length;
-//             return { time: hour, [variableName]: average };
-//         });
-//     };
-//
-//     const phData = groupByHour(
-//         records.map((record: Record) => ({ time: record.datetime, value: record.ph })),
-//         'ph'
-//     );
-//
-//     const waterTempData = groupByHour(
-//         records.map((record: Record) => ({ time: record.datetime, value: record.water_temp })),
-//         'waterTemp'
-//     );
-//
-//     const tankTdsData = groupByHour(
-//         records.map((record: Record) => ({ time: record.datetime, value: record.tank_tds })),
-//         'tankTds'
-//     );
-//
-//     const fieldTdsData = groupByHour(
-//         records.map((record: Record) => ({ time: record.datetime, value: record.field_tds })),
-//         'fieldTds'
-//     );
-//
-//     return {
-//         phMap: phData,
-//         waterTempMap: waterTempData,
-//         tankTdsMap: tankTdsData,
-//         fieldTdsMap: fieldTdsData
-//     }
-// }
 
 export function getHour(value: string) {
     const [date, time] = value.split(" ");
@@ -121,6 +73,27 @@ export function formatDateDifference(inputDate: string): string {
     }
 
     return msToTime(timeDifference)
+}
+
+export function exportDataToCSV(data: Record[], worksheetName?: string) {
+    if(!Array.isArray(data)) {
+        throw new Error('Data must be an array of objects')
+    }
+
+    const dataToExport = data.map((record: Record) => ({
+        datetime: record.datetime,
+        water_temp: record.water_temp,
+        ph: record.ph,
+        tank_tds: record.tank_tds,
+        field_tds: record.field_tds
+    }))
+
+    const workbook = XLSX.utils.book_new()
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport)
+    XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName || 'Sheet1')
+
+    XLSX.writeFile(workbook, 'monitoring-data.xlsx')
+    console.log('Data exported to CSV')
 }
 
 /*

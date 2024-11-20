@@ -27,8 +27,6 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
 
     const {phMap, waterTempMap, tankTdsMap, fieldTdsMap} = mapDeviceRecordToObject(filteredRecords);
 
-    console.log('tankTds', tankTdsMap);
-
     return (
         <div className={'p-6 space-y-4'}>
             <header className={'mb-4 md:mb-2'}>
