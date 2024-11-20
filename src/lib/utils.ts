@@ -12,28 +12,77 @@ export function mapDeviceRecordToObject(records: Record[]) {
         ph: record.ph,
     }))
 
-    let tempMap = records.map((record: Record) => ({
+    let waterTempMap = records.map((record: Record) => ({
         time: record.datetime,
-        temp: record.temp,
+        waterTemp: record.water_temp,
     }))
 
-    let humMap = records.map((record: Record) => ({
+    let tankTdsMap = records.map((record: Record) => ({
         time: record.datetime,
-        hum: record.hum,
+        tankTds: record.tank_tds,
     }))
 
-    let tdsMap = records.map((record: Record) => ({
+    let fieldTdsMap = records.map((record: Record) => ({
         time: record.datetime,
-        tds: record.tds,
+        fieldTds: record.field_tds,
     }))
 
     return {
         phMap,
-        tempMap,
-        humMap,
-        tdsMap
+        waterTempMap,
+        tankTdsMap,
+        fieldTdsMap
     }
 }
+
+// export function mapDeviceRecordToObject(records: Record[]) {
+//     const groupByHour = (data: { time: string; value: number | null }[], variableName: string) => {
+//         const hourlyGroups: { [hour: string]: number[] } = {};
+//
+//         data.forEach((item) => {
+//             if (!item.time || item.value == null) return;
+//
+//             const hour = new Date(item.time).getHours().toString().padStart(2, '0');
+//             if (!hourlyGroups[hour]) {
+//                 hourlyGroups[hour] = [];
+//             }
+//             hourlyGroups[hour].push(item.value);
+//         });
+//
+//         return Object.keys(hourlyGroups).map(hour => {
+//             const values = hourlyGroups[hour];
+//             const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+//             return { time: hour, [variableName]: average };
+//         });
+//     };
+//
+//     const phData = groupByHour(
+//         records.map((record: Record) => ({ time: record.datetime, value: record.ph })),
+//         'ph'
+//     );
+//
+//     const waterTempData = groupByHour(
+//         records.map((record: Record) => ({ time: record.datetime, value: record.water_temp })),
+//         'waterTemp'
+//     );
+//
+//     const tankTdsData = groupByHour(
+//         records.map((record: Record) => ({ time: record.datetime, value: record.tank_tds })),
+//         'tankTds'
+//     );
+//
+//     const fieldTdsData = groupByHour(
+//         records.map((record: Record) => ({ time: record.datetime, value: record.field_tds })),
+//         'fieldTds'
+//     );
+//
+//     return {
+//         phMap: phData,
+//         waterTempMap: waterTempData,
+//         tankTdsMap: tankTdsData,
+//         fieldTdsMap: fieldTdsData
+//     }
+// }
 
 export function getHour(value: string) {
     const [date, time] = value.split(" ");
@@ -86,11 +135,10 @@ export function generateRandomMonitoringData(startDate: string, numRecords: numb
         const datetime: string = new Date(startDateTime.getTime() + i * 30 * 60000).toISOString();
 
         const temp: number = getRandomNumber(20, 50);
-        const hum: number = getRandomNumber(20, 50);
         const ph: number = getRandomNumber(4, 14, true);
         const tds: number = getRandomNumber(100, 1000);
 
-        records.push({datetime, temp, hum, ph, tds});
+        records.push({datetime, water_temp: temp, tank_tds: tds, ph, field_tds: tds});
     }
 
     return records;

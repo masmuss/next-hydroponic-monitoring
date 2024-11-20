@@ -1,11 +1,5 @@
 export type Devices = {
-    [deviceId: string]: {
-        configs: Config;
-        id: string;
-        name: string;
-        target: string;
-        records: Record[];
-    };
+    [deviceId: string]: Device;
 };
 
 export type Device = {
@@ -13,26 +7,35 @@ export type Device = {
     id: string;
     name: string;
     target: string;
+    record_count: number;
     records: Record[];
 };
 
 export type Config = {
-    solvents : {
-        a: number;
-        b: number;
-    },
+    mode: "manual" | "auto";
     relays: {
-        relay1: boolean;
-        relay2: boolean;
-        relay3: boolean;
-        relay4: boolean;
+        auto: Relays;
+        manual: Relays;
+    };
+    schedule: {
+        week_1: number
+        week_2: number
+        week_5: number
+        week_6: number
     }
+}
+
+export type Relays = {
+    aerator: boolean
+    nutrient_a: boolean
+    nutrient_b: boolean
+    ph_buffer: boolean
 }
 
 export type Record = {
     datetime: string;
-    hum: number;
+    field_tds: number;
     ph: number;
-    tds: number;
-    temp: number;
+    tank_tds: number;
+    water_temp: number;
 }

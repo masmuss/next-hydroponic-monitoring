@@ -77,7 +77,7 @@ export function getDeviceRecordDataStream(deviceId: string, date: string, callba
 
     onValue(recordsRef, (snapshot) => {
         if (snapshot.exists()) {
-            const records = snapshot.val();
+            const records: Record[] = snapshot.val();
 
             if (!records) {
                 callback([]);
@@ -85,7 +85,7 @@ export function getDeviceRecordDataStream(deviceId: string, date: string, callba
             }
 
             const dailyRecords = records.filter((record: Record) => {
-                return record.datetime.includes(formattedDate);
+                return record.datetime && record.datetime.includes(formattedDate);
             });
             callback(dailyRecords);
         } else {

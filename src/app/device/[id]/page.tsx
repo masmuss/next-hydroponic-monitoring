@@ -9,6 +9,7 @@ import MonitoringChart from "@/components/partials/monitoring/monitoring-chart";
 import Loading from "@/components/loading";
 import DeviceDetailsCard from "@/components/partials/device/device-detail-card";
 import MonitoringLogActivity from "@/components/partials/monitoring/monitoring-log-activity";
+import {Card, CardContent, CardHeader} from "@/components/ui/card";
 
 export default function DeviceMonitoringPage({params}: { params: { id: string } }) {
     const [device, setDevice] = useState<Device | null>(null);
@@ -24,7 +25,9 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
 
     if (!device) return <Loading/>;
 
-    const {phMap, tempMap, humMap, tdsMap} = mapDeviceRecordToObject(filteredRecords);
+    const {phMap, waterTempMap, tankTdsMap, fieldTdsMap} = mapDeviceRecordToObject(filteredRecords);
+
+    console.log('tankTds', tankTdsMap);
 
     return (
         <div className={'p-6 space-y-4'}>
@@ -38,32 +41,35 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
                 <MonitoringLogActivity setDate={setDate} filteredRecords={filteredRecords}/>
                 <DeviceDetailsCard device={device} lastRecord={lastRecord}/>
             </div>
-            <div className="w-full flex flex-col gap-4">
-                <div className={cn('w-full flex flex-col gap-2', 'md:flex-row md:gap-4')}>
+            <Card className="w-full flex flex-col gap-4">
+                <CardHeader>
+                    <h3 className={'font-semibold md:text-2xl'}>
+                        Fluctuation Monitoring
+                    </h3>
+                </CardHeader>
+                <CardContent>
                     <MonitoringChart
-                        title="Temperature"
-                        data={tempMap}
-                        config={chartConfigs.temperature}
+                        title="Water Temperature"
+                        data={waterTempMap}
+                        config={chartConfigs.waterTemp}
                     />
-                    <MonitoringChart
-                        title="Humidity"
-                        data={humMap}
-                        config={chartConfigs.humidity}
-                    />
-                </div>
-                <div className={cn('w-full flex flex-col gap-2', 'md:flex-row md:gap-4')}>
                     <MonitoringChart
                         title="Acidity"
                         data={phMap}
                         config={chartConfigs.acidity}
                     />
                     <MonitoringChart
-                        title="Total Dissolved Solids"
-                        data={tdsMap}
-                        config={chartConfigs.tds}
+                        title="Tank TDS"
+                        data={tankTdsMap}
+                        config={chartConfigs.tankTds}
                     />
-                </div>
-            </div>
+                    <MonitoringChart
+                        title="Field TDS"
+                        data={fieldTdsMap}
+                        config={chartConfigs.fieldTds}
+                    />
+                </CardContent>
+            </Card>
         </div>
     );
 }

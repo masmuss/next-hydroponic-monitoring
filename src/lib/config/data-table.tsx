@@ -21,25 +21,34 @@ export const monitoringDatatableColumns: ColumnDef<DeviceRecords>[] = [
         },
         cell: ({row}) => {
             return (
-                <span className={'text-right'}>{getHour(row.original.datetime)}</span>
+                <span className={'text-center'}>{row.original.datetime && getHour(row.original.datetime)}</span>
             );
         }
     },
     {
         header: 'Temperature',
-        accessorKey: 'temp',
+        accessorKey: 'water_temp',
         cell: ({row}) => {
             return (
-                <span className={'text-right'}>{row.original.temp} °C</span>
+                <span className={'text-right'}>{row.original.water_temp.toFixed(1)} °C</span>
             );
         }
     },
     {
-        header: 'Humidity',
-        accessorKey: 'hum',
+        header: 'Tank TDS',
+        accessorKey: 'tank_tds',
         cell: ({row}) => {
             return (
-                <span className={'text-right'}>{row.original.hum} %</span>
+                <span className={'text-right'}>{row.original.tank_tds.toFixed()} ppm</span>
+            );
+        }
+    },
+    {
+        header: 'Field TDS',
+        accessorKey: 'field_tds',
+        cell: ({row}) => {
+            return (
+                <span className={'text-right'}>{row.original.field_tds.toFixed()} ppm</span>
             );
         }
     },
@@ -49,15 +58,6 @@ export const monitoringDatatableColumns: ColumnDef<DeviceRecords>[] = [
         cell: ({row}) => {
             return (
                 <span className={'text-center'}>{row.original.ph.toFixed(1)}</span>
-            );
-        }
-    },
-    {
-        header: 'TDS',
-        accessorKey: 'tds',
-        cell: ({row}) => {
-            return (
-                <span className={'text-right'}>{row.original.tds.toFixed(1)} ppm</span>
             );
         }
     },
