@@ -1,5 +1,5 @@
 import {ChartConfig, ChartContainer, ChartTooltip} from "@/components/ui/chart";
-import {CartesianGrid, Line, LineChart, XAxis, YAxis} from "recharts";
+import {Area, AreaChart, CartesianGrid, XAxis, YAxis} from "recharts";
 import {cn, getHour} from "@/lib/utils";
 import React from "react";
 
@@ -27,21 +27,31 @@ export default function MonitoringChart(props: MonitoringChartProps) {
                         <p className="text-sm md:text-base text-center">No data available for {title}</p>
                     ) : (
                         <ChartContainer config={config} className="w-full h-64">
-                            <LineChart accessibilityLayer data={data} syncId={'fluctuation-chart'}>
+                            <AreaChart accessibilityLayer data={data} syncId={'fluctuation-chart'}>
                                 <CartesianGrid vertical={true} horizontal={true} strokeDasharray="3 3"/>
                                 <XAxis dataKey="time" tickLine={true} tickFormatter={getHour} axisLine={true}/>
                                 <YAxis tickLine={true} axisLine={true}/>
                                 <ChartTooltip
                                     content={<CustomTooltip/>}/>
                                 {dataKeys.map((key) => (
-                                    <Line
-                                        key={key}
-                                        dataKey={key}
-                                        stroke={config[key as keyof ChartConfig].color}
-                                        radius={4}
-                                    />
+                                    <>
+                                        <defs>
+                                            <linearGradient id={key} x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor={config[key as keyof ChartConfig].color}
+                                                      stopOpacity={0.8}/>
+                                                <stop offset="95%" stopColor={config[key as keyof ChartConfig].color}
+                                                      stopOpacity={0}/>
+                                            </linearGradient>
+                                        </defs>
+                                        <Area
+                                            key={key}
+                                            type="monotone"
+                                            dataKey={key}
+                                            stroke={config[key as keyof ChartConfig].color}
+                                            fillOpacity={1} fill={`url(${key})`}/>
+                                    </>
                                 ))}
-                            </LineChart>
+                            </AreaChart>
                         </ChartContainer>
                     )
                 }
