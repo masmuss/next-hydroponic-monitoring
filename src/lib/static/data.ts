@@ -5,7 +5,7 @@ const monitoringResults: Record[] = generateRandomMonitoringData('2024-08-20T00:
 
 const temperatureResults = monitoringResults.map((result) => ({
     time: result.datetime,
-    temp: result.temp,
+    waterTemp: result.water_temp,
 }))
 
 const phResults = monitoringResults.map((result) => ({
@@ -13,14 +13,14 @@ const phResults = monitoringResults.map((result) => ({
     ph: result.ph,
 }))
 
-const tdsResults = monitoringResults.map((result) => ({
+const tankTdsResults = monitoringResults.map((result) => ({
     time: result.datetime,
-    tds: result.tds,
+    tankTds: result.tank_tds,
 }))
 
-const humidityResults = monitoringResults.map((result) => ({
+const fieldTdsResults = monitoringResults.map((result) => ({
     time: result.datetime,
-    hum: result.hum,
+    fieldTds: result.field_tds,
 }))
 
-export {monitoringResults, temperatureResults, phResults, tdsResults, humidityResults}
+export {monitoringResults, temperatureResults, phResults, tankTdsResults, fieldTdsResults}
