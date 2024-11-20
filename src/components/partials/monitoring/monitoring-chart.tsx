@@ -32,7 +32,7 @@ export default function MonitoringChart(props: MonitoringChartProps) {
                                 <XAxis dataKey="time" tickLine={true} tickFormatter={getHour} axisLine={true}/>
                                 <YAxis tickLine={true} axisLine={true}/>
                                 <ChartTooltip
-                                    content={<CustomTooltip/>}/>
+                                    content={<CustomTooltip active={undefined} payload={undefined} label={undefined}/>}/>
                                 {dataKeys.map((key) => (
                                     <>
                                         <defs>

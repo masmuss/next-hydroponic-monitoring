@@ -40,6 +40,7 @@ const DeviceStatusSection = ({device}: { device: Device }) => (
             <DataItem
                 key={relay}
                 label={relay.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                // @ts-ignore
                 value={device.configs.relays[device.configs.mode][relay] ? "ON" : "OFF"}
             />
         ))}
