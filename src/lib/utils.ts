@@ -76,24 +76,36 @@ export function formatDateDifference(inputDate: string): string {
 }
 
 export function exportDataToCSV(data: Record[], worksheetName?: string) {
-    if(!Array.isArray(data)) {
-        throw new Error('Data must be an array of objects')
+    const convertToCSV = (objArray: Record[]) => {
+        const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+        let str: string = '';
+
+        // Add header
+        let line: string = '';
+        for (let index in array[0]) {
+            if (line !== '') line += ','
+            line += index;
+        }
+
+        for (let i = 0; i < array.length; i++) {
+            str += line + '\r\n';
+            line = '';
+            for (let index in array[i]) {
+                if (line !== '') line += ','
+                line += array[i][index];
+            }
+            str += line + '\r\n';
+        }
+
+        return str;
     }
 
-    const dataToExport = data.map((record: Record) => ({
-        datetime: record.datetime,
-        water_temp: record.water_temp,
-        ph: record.ph,
-        tank_tds: record.tank_tds,
-        field_tds: record.field_tds
-    }))
-
-    const workbook = XLSX.utils.book_new()
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport)
-    XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName || 'Sheet1')
-
-    XLSX.writeFile(workbook, 'monitoring-data.xlsx')
-    console.log('Data exported to CSV')
+    const csvData = new Blob([convertToCSV(data)], {type: 'text/csv;charset=utf-8;'});
+    const csvURL = window.URL.createObjectURL(csvData);
+    const tempLink = document.createElement('a');
+    tempLink.href = csvURL;
+    tempLink.setAttribute('download', `${worksheetName}.csv`);
+    tempLink.click();
 }
 
 /*

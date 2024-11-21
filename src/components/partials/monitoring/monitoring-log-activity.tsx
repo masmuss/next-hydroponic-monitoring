@@ -5,6 +5,7 @@ import {Record} from "@/lib/static/types";
 import {monitoringDatatableColumns} from "@/lib/config/data-table";
 import {Button} from "@/components/ui/button";
 import {exportDataToCSV} from "@/lib/utils";
+import {useSelectedDays} from "react-day-picker/src/hooks/useSelectedDays";
 
 type MonitoringLogActivityProps = { setDate: (date: string) => void, filteredRecords: Record[] }
 
@@ -20,7 +21,7 @@ export default function MonitoringLogActivity({setDate, filteredRecords}: Monito
                 <div className={'flex items-center gap-2'}>
                     <DatePickerWithPresets onDateChange={(selectedDate) => setDate(selectedDate.toLocaleDateString())}/>
                     <Button onClick={() => {
-                        exportDataToCSV(filteredRecords, `monitoring_logs`)
+                        exportDataToCSV(filteredRecords, `monitoring_logs_${filteredRecords[0].datetime.split(' ')[0]}`)
                     }}>Export to CSV</Button>
                 </div>
             </CardHeader>
