@@ -5,7 +5,6 @@ import {Record} from "@/lib/static/types";
 import {monitoringDatatableColumns} from "@/lib/config/data-table";
 import {Button} from "@/components/ui/button";
 import {exportDataToCSV} from "@/lib/utils";
-import {useSelectedDays} from "react-day-picker/src/hooks/useSelectedDays";
 
 type MonitoringLogActivityProps = { setDate: (date: string) => void, filteredRecords: Record[] }
 
