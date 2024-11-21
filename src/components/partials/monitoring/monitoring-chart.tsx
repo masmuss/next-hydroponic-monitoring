@@ -7,6 +7,7 @@ type MonitoringChartProps = {
     title: string;
     data: any[];
     config: ChartConfig;
+    children?: React.ReactNode;
 }
 
 export default function MonitoringChart(props: MonitoringChartProps) {
@@ -14,6 +15,7 @@ export default function MonitoringChart(props: MonitoringChartProps) {
         title,
         data,
         config,
+        children
     } = props;
 
     const dataKeys: string[] = Object.keys(config).filter(key => key !== 'time');
@@ -51,6 +53,7 @@ export default function MonitoringChart(props: MonitoringChartProps) {
                                             fillOpacity={1} fill={`url(${key})`}/>
                                     </>
                                 ))}
+                                {children}
                             </AreaChart>
                         </ChartContainer>
                     )
