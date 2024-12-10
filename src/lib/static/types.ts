@@ -39,3 +39,15 @@ export type Record = {
     tank_tds: number;
     water_temp: number;
 }
+
+export type SensorMappedData = {
+    // @ts-ignore
+    time: string;
+    [sensor: string]: number;
+};
+
+export type SensorStats = {
+    min: number;
+    max: number;
+    average: number;
+};

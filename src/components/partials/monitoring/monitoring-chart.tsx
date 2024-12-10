@@ -1,6 +1,6 @@
 import {ChartConfig, ChartContainer, ChartTooltip} from "@/components/ui/chart";
 import {Area, AreaChart, CartesianGrid, XAxis, YAxis} from "recharts";
-import {cn, getHour} from "@/lib/utils";
+import {calculateMappedSensorStats, cn, getHour} from "@/lib/utils";
 import React from "react";
 
 type MonitoringChartProps = {
@@ -15,26 +15,35 @@ export default function MonitoringChart(props: MonitoringChartProps) {
         title,
         data,
         config,
-        children
+        children,
     } = props;
 
     const dataKeys: string[] = Object.keys(config).filter(key => key !== 'time');
+    const {min, max, average} = calculateMappedSensorStats(data, dataKeys[0]);
 
     return (
         <div className="w-full">
-            <div className={cn('text-xl', 'md:text-xl')}>{title}</div>
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+                <div className={cn('text-xl', 'md:text-xl')}>{title}</div>
+                <div className={cn('text-xs', 'md:text-sm')}>
+                    <span className="font-semibold">Min:</span> {min.toFixed(1)}{' '}
+                    <span className="font-semibold">Max:</span> {max.toFixed(1)}{' '}
+                    <span className="font-semibold">Avg:</span> {average.toFixed(1)}
+                </div>
+            </div>
             <div className={'mt-4'}>
                 {
                     data.length === 0 ? (
                         <p className="text-sm md:text-base text-center">No data available for {title}</p>
                     ) : (
-                        <ChartContainer config={config} className="w-full h-64">
+                        <ChartContainer config={config} className="w-full h-64 -ml-3">
                             <AreaChart accessibilityLayer data={data} syncId={'fluctuation-chart'}>
                                 <CartesianGrid vertical={true} horizontal={true} strokeDasharray="3 3"/>
                                 <XAxis dataKey="time" tickLine={true} tickFormatter={getHour} axisLine={true}/>
                                 <YAxis tickLine={true} axisLine={true}/>
                                 <ChartTooltip
-                                    content={<CustomTooltip active={undefined} payload={undefined} label={undefined}/>}/>
+                                    content={<CustomTooltip active={undefined} payload={undefined}
+                                                            label={undefined}/>}/>
                                 {dataKeys.map((key) => (
                                     <>
                                         <defs>

@@ -13,6 +13,7 @@ export const monitoringDatatableColumns: ColumnDef<DeviceRecords>[] = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="text-xs whitespace-nowrap md:text-sm"
                 >
                     Time
                     <ArrowUpDown className="ml-2 h-4 w-4"/>
@@ -21,34 +22,40 @@ export const monitoringDatatableColumns: ColumnDef<DeviceRecords>[] = [
         },
         cell: ({row}) => {
             return (
-                <span className={'text-center'}>{row.original.datetime && getHour(row.original.datetime)}</span>
+                <span className={'text-center text-xs whitespace-nowrap md:text-sm'}>{row.original.datetime && getHour(row.original.datetime)}</span>
             );
         }
     },
     {
-        header: 'Temperature',
+        header: () => {
+            return (<span className='text-xs whitespace-nowrap md:text-sm'>Temperature</span>)
+        },
         accessorKey: 'water_temp',
         cell: ({row}) => {
             return (
-                <span className={'text-right'}>{row.original.water_temp.toFixed(1)} °C</span>
+                <span className={'text-right text-xs whitespace-nowrap md:text-sm'}>{row.original.water_temp.toFixed(1)} °C</span>
             );
         }
     },
     {
-        header: 'Tank TDS',
+        header: () => {
+            return (<span className='text-xs whitespace-nowrap md:text-sm'>Tank TDS</span>)
+        },
         accessorKey: 'tank_tds',
         cell: ({row}) => {
             return (
-                <span className={'text-right'}>{row.original.tank_tds.toFixed()} ppm</span>
+                <span className={'text-right text-xs whitespace-nowrap md:text-sm'}>{row.original.tank_tds.toFixed()} ppm</span>
             );
         }
     },
     {
-        header: 'Field TDS',
+        header: () => {
+            return (<span className='text-xs whitespace-nowrap md:text-sm'>Field TDS</span>)
+        },
         accessorKey: 'field_tds',
         cell: ({row}) => {
             return (
-                <span className={'text-right'}>{row.original.field_tds.toFixed()} ppm</span>
+                <span className={'text-right text-xs whitespace-nowrap md:text-sm'}>{row.original.field_tds.toFixed()} ppm</span>
             );
         }
     },
@@ -57,7 +64,7 @@ export const monitoringDatatableColumns: ColumnDef<DeviceRecords>[] = [
         accessorKey: 'ph',
         cell: ({row}) => {
             return (
-                <span className={'text-center'}>{row.original.ph.toFixed(1)}</span>
+                <span className={'text-center text-xs whitespace-nowrap md:text-sm'}>{row.original.ph.toFixed(1)}</span>
             );
         }
     },

@@ -8,7 +8,7 @@ export default function MonitorView() {
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold">Devices</h1>
                 </div>
-                <div className="flex flex-wrap gap-6">
+                <div className="flex flex-wrap flex-1 gap-6">
                     <DeviceList/>
                 </div>
             </main>

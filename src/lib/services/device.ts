@@ -101,3 +101,4 @@ export function getDeviceDetailStream(deviceId: string, callback: (data: Device)
         callback(data);
     });
 }
+

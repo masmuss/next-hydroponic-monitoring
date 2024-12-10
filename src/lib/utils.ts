@@ -1,7 +1,7 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
 import * as XLSX from 'xlsx'
-import {Record} from "@/lib/static/types"
+import {Record, SensorMappedData, SensorStats} from "@/lib/static/types"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -34,6 +34,28 @@ export function mapDeviceRecordToObject(records: Record[]) {
         tankTdsMap,
         fieldTdsMap
     }
+}
+
+export function calculateMappedSensorStats(data: SensorMappedData[], sensorKey: string): SensorStats {
+    if (!Array.isArray(data) || data.length === 0) {
+        return {
+            min: 0,
+            max: 0,
+            average: 0
+        };
+    }
+
+    const values = data.map((item) => item[sensorKey]);
+
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    const averageValue = values.reduce((sum, val) => sum + val, 0) / values.length;
+
+    return {
+        min: minValue,
+        max: maxValue,
+        average: averageValue,
+    };
 }
 
 export function getHour(value: string) {
