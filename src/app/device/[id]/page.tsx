@@ -29,10 +29,7 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
     const {phMap, waterTempMap, tankTdsMap, fieldTdsMap} = mapDeviceRecordToObject(filteredRecords);
 
     return (
-        <div className={'p-6 space-y-4'}>
-            <header className={'mb-4 md:mb-2'}>
-                <h1 className={cn('font-semibold text-2xl', 'md:font-bold md:text-4xl')}>Device Monitoring</h1>
-            </header>
+        <div className={'space-y-4'}>
             <div className={cn(
                 'flex flex-col-reverse',
                 'md:flex-row-reverse gap-4'
@@ -53,7 +50,7 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
                         config={chartConfigs.waterTemp}
                     >
                         <ReferenceLine y={30} label="Max" stroke="red" strokeWidth={0.8} strokeDasharray="4" />
-                        <ReferenceLine y={25} label="Min" stroke="green" strokeWidth={0.8} strokeDasharray="4" />
+                        <ReferenceLine y={24} label="Min" stroke="green" strokeWidth={0.8} strokeDasharray="4" />
                     </MonitoringChart>
                     <MonitoringChart
                         title="Acidity"
@@ -68,16 +65,16 @@ export default function DeviceMonitoringPage({params}: { params: { id: string } 
                         data={tankTdsMap}
                         config={chartConfigs.tankTds}
                     >
-                        <ReferenceLine y={1000} label="Max" stroke="red" strokeWidth={0.8} strokeDasharray="4" />
-                        <ReferenceLine y={500} label="Min" stroke="green" strokeWidth={0.8} strokeDasharray="4" />
+                        <ReferenceLine y={2100} label="Max" stroke="red" strokeWidth={0.8} strokeDasharray="4" />
+                        <ReferenceLine y={750} label="Min" stroke="green" strokeWidth={0.8} strokeDasharray="4" />
                     </MonitoringChart>
                     <MonitoringChart
                         title="Field TDS"
                         data={fieldTdsMap}
                         config={chartConfigs.fieldTds}
                     >
-                        <ReferenceLine y={1000} label="Max" stroke="red" strokeWidth={0.8} strokeDasharray="4" />
-                        <ReferenceLine y={500} label="Min" stroke="green" strokeWidth={0.8} strokeDasharray="4" />
+                        <ReferenceLine y={2100} label="Max" stroke="red" strokeWidth={0.8} strokeDasharray="4" />
+                        <ReferenceLine y={750} label="Min" stroke="green" strokeWidth={0.8} strokeDasharray="4" />
                     </MonitoringChart>
                 </CardContent>
             </Card>

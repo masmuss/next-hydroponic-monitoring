@@ -1,6 +1,6 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import DatePickerWithPresets from "@/components/date-picker";
-import {DataTable} from "@/components/data-table";
+import {DataTable} from "@/components/data-table/data-table";
 import {Record} from "@/lib/static/types";
 import {monitoringDatatableColumns} from "@/lib/config/data-table";
 import {Button} from "@/components/ui/button";
@@ -21,7 +21,7 @@ export default function MonitoringLogActivity({setDate, filteredRecords}: Monito
                     <DatePickerWithPresets onDateChange={(selectedDate) => setDate(selectedDate.toLocaleDateString())}/>
                     <Button onClick={() => {
                         exportDataToCSV(filteredRecords, `monitoring_logs_${filteredRecords[0].datetime.split(' ')[0]}`)
-                    }}>Export to CSV</Button>
+                    }} className="sm:hidden md:block">Export to CSV</Button>
                 </div>
             </CardHeader>
             <CardContent>

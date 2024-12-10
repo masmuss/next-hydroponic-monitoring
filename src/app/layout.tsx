@@ -4,12 +4,9 @@ import "./globals.css";
 import React from "react";
 import {cn} from "@/lib/utils";
 import {NextFont} from "next/dist/compiled/@next/font";
-import {ResizableHandle, ResizablePanel, ResizablePanelGroup} from "@/components/ui/resizable";
-import {Separator} from "@radix-ui/react-select";
-import Nav from "@/components/nav";
-import {AlertCircle, Archive, ArchiveX, Inbox, MessagesSquare, Send, ShoppingCart, Trash2, Users2} from "lucide-react";
-import MainWrapper from "@/components/main-wrapper";
-import {cookies} from "next/headers";
+import {AppSidebar} from "@/components/layout/app-sidebar"
+import {Separator} from "@/components/ui/separator"
+import {SidebarInset, SidebarProvider, SidebarTrigger,} from "@/components/ui/sidebar"
 
 const robotoMono: NextFont = Roboto_Mono({subsets: ["latin"]});
 
@@ -21,22 +18,24 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: Readonly<{
     children: React.ReactNode;
 }>) {
-    const layout = cookies().get("react-resizable-panels:layout:mail")
-    const collapsed = cookies().get("react-resizable-panels:collapsed")
-
-    const defaultLayout = layout ? JSON.parse(layout.value) : undefined
-    const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined
-
     return (
         <html lang="en">
         <body className={cn(robotoMono.className, 'min-h-screen')} suppressHydrationWarning>
-        {/*<MainWrapper*/}
-        {/*    defaultLayout={defaultLayout}*/}
-        {/*    defaultCollapsed={defaultCollapsed}*/}
-        {/*    navCollapsedSize={3}*/}
-        {/*>*/}
-            {children}
-        {/*</MainWrapper>*/}
+        <SidebarProvider>
+            <AppSidebar/>
+            <SidebarInset>
+                <header
+                    className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+                    <div className="flex items-center gap-2 px-4">
+                        <SidebarTrigger className="-ml-1"/>
+                        <Separator orientation="vertical" className="mr-2 h-4"/>
+                    </div>
+                </header>
+                <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                    {children}
+                </div>
+            </SidebarInset>
+        </SidebarProvider>
         </body>
         </html>
     );

@@ -13,14 +13,14 @@ export default function DashboardView(props: DashboardViewProps) {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <main className="grid gap-4 p-4 sm:p-6">
+            <main className="grid gap-4">
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 h-fit">
                     <DashboardCard
                         title={'Connected Devices'}
                         description={'Total number of connected IoT devices'}
                         count={devicesCount}
                         icon={ExternalLink}
-                        linkHref={'/monitors'}
+                        linkHref={'/devices'}
                     />
                 </div>
                 {/*<Card>*/}
