@@ -1,5 +1,5 @@
 import {realtimeDatabase} from "@/lib/config/firebase";
-import {DatabaseReference, DataSnapshot, limitToLast, onValue, orderByChild, query, ref, set} from "firebase/database";
+import {DatabaseReference, DataSnapshot, limitToLast, onValue, orderByChild, query, ref} from "firebase/database";
 import {Device, Record} from "@/lib/static/types";
 
 type DevicesList = {
@@ -92,17 +92,6 @@ export function getDeviceRecordDataStream(deviceId: string, date: string, callba
             callback([]);
         }
     });
-}
-
-export function changeDeviceRelayStatus(deviceId: string, relayKey: string, status: boolean) {
-    const relayRef: DatabaseReference = ref(realtimeDatabase, `devices/${deviceId}/configs/relays/${relayKey}`);
-    return set(relayRef, status)
-        .then(() => {
-            console.log(`Relay ${relayKey} status updated to ${status}`);
-        })
-        .catch((error) => {
-            console.error("Error updating relay status: ", error);
-        });
 }
 
 export function getDeviceDetailStream(deviceId: string, callback: (data: Device) => void) {
