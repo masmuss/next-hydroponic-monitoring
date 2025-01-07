@@ -98,7 +98,7 @@ export function formatDateDifference(inputDate: string): string {
 }
 
 export function exportDataToCSV(data: Record[], worksheetName?: string) {
-    const convertToCSV = (objArray: Record[]) => {
+    const convertToCSV = (objArray: any[]) => {
         const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
         let str: string = '';
 
@@ -122,12 +122,54 @@ export function exportDataToCSV(data: Record[], worksheetName?: string) {
         return str;
     }
 
-    const csvData = new Blob([convertToCSV(data)], {type: 'text/csv;charset=utf-8;'});
+    const manipulatedData = data.map((record) => {
+        return {
+            time: record.datetime.split(' ')[1],
+            water_temp: record.water_temp,
+            tds: record.tank_tds,
+            ph: record.ph,
+            ph_range: getPhRange(record.ph),
+            tds_range: getTdsRange(record.tank_tds),
+            temp_range: getTempRange(record.water_temp)
+        }
+    })
+
+    const csvData = new Blob([convertToCSV(manipulatedData)], {type: 'text/csv;charset=utf-8;'});
     const csvURL = window.URL.createObjectURL(csvData);
     const tempLink = document.createElement('a');
     tempLink.href = csvURL;
     tempLink.setAttribute('download', `${worksheetName}.csv`);
     tempLink.click();
+}
+
+function getPhRange(ph: number): string {
+    if (ph < 6) {
+        return 'Asam';
+    } else if (ph > 7) {
+        return 'Basa';
+    } else {
+        return 'Optimal';
+    }
+}
+
+function getTdsRange(tds: number): string {
+    if (tds < 750) {
+        return 'Rendah';
+    } else if (tds > 2100) {
+        return 'Tinggi';
+    } else {
+        return 'Optimal';
+    }
+}
+
+function getTempRange(temp: number): string {
+    if (temp < 24) {
+        return 'Dingin';
+    } else if (temp > 30) {
+        return 'Panas';
+    } else {
+        return 'Optimal';
+    }
 }
 
 /*
