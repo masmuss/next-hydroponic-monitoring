@@ -52,30 +52,27 @@ export function formatDateDifference(inputDate: string): string {
     return msToTime(timeDifference)
 }
 
-export function exportDataToCSV(data: SensorMappedData[], worksheetName?: string) {
+export function exportDataToCSV(data: SensorMappedData[], worksheetName: string = "data") {
     const convertToCSV = (objArray: SensorMappedData[]) => {
-        const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+        if (!Array.isArray(objArray) || objArray.length === 0) return "";
+
         let str: string = '';
 
-        // Add header
-        let line: string = '';
-        for (let index in array[0]) {
-            if (line !== '') line += ','
-            line += index;
-        }
+        // Ambil semua kunci dari objek pertama, lalu lewati kolom kedua
+        const keys = Object.keys(objArray[0]);
+        const filteredKeys = keys.filter((_, index) => index !== 1); // Skip kolom kedua
 
-        for (let i = 0; i < array.length; i++) {
-            str += line + '\r\n';
-            line = '';
-            for (let index in array[i]) {
-                if (line !== '') line += ','
-                line += array[i][index];
-            }
-            str += line + '\r\n';
-        }
+        // Tambahkan header
+        str += filteredKeys.join(",") + "\r\n";
+
+        // Tambahkan isi data
+        objArray.forEach((row) => {
+            const rowData = filteredKeys.map(key => row[key]).join(",");
+            str += rowData + "\r\n";
+        });
 
         return str;
-    }
+    };
 
     const csvData = new Blob([convertToCSV(data)], { type: 'text/csv;charset=utf-8;' });
     const csvURL = window.URL.createObjectURL(csvData);
@@ -84,3 +81,4 @@ export function exportDataToCSV(data: SensorMappedData[], worksheetName?: string
     tempLink.setAttribute('download', `${worksheetName}.csv`);
     tempLink.click();
 }
+
