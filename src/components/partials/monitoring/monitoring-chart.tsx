@@ -1,6 +1,6 @@
-import {ChartConfig, ChartContainer, ChartTooltip} from "@/components/ui/chart";
-import {Area, AreaChart, CartesianGrid, XAxis, YAxis} from "recharts";
-import {calculateMappedSensorStats, cn, getHour} from "@/lib/utils";
+import { ChartConfig, ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { calculateMappedSensorStats, cn } from "@/lib/utils";
 import React from "react";
 
 type MonitoringChartProps = {
@@ -19,7 +19,7 @@ export default function MonitoringChart(props: MonitoringChartProps) {
     } = props;
 
     const dataKeys: string[] = Object.keys(config).filter(key => key !== 'time');
-    const {min, max, average} = calculateMappedSensorStats(data, dataKeys[0]);
+    const { min, max, average } = calculateMappedSensorStats(data, dataKeys[0]);
 
     return (
         <div className="w-full">
@@ -38,20 +38,20 @@ export default function MonitoringChart(props: MonitoringChartProps) {
                     ) : (
                         <ChartContainer config={config} className="w-full h-64 -ml-3">
                             <AreaChart accessibilityLayer data={data} syncId={'fluctuation-chart'}>
-                                <CartesianGrid vertical={true} horizontal={true} strokeDasharray="3 3"/>
-                                <XAxis dataKey="time" tickLine={true} tickFormatter={getHour} axisLine={true}/>
-                                <YAxis tickLine={true} axisLine={true}/>
+                                <CartesianGrid vertical={true} horizontal={true} strokeDasharray="3 3" />
+                                <XAxis dataKey="time" tickLine={true} axisLine={true} />
+                                <YAxis tickLine={true} axisLine={true} />
                                 <ChartTooltip
                                     content={<CustomTooltip active={undefined} payload={undefined}
-                                                            label={undefined}/>}/>
+                                        label={undefined} />} />
                                 {dataKeys.map((key) => (
                                     <>
                                         <defs>
                                             <linearGradient id={key} x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="5%" stopColor={config[key as keyof ChartConfig].color}
-                                                      stopOpacity={0.8}/>
+                                                    stopOpacity={0.8} />
                                                 <stop offset="95%" stopColor={config[key as keyof ChartConfig].color}
-                                                      stopOpacity={0}/>
+                                                    stopOpacity={0} />
                                             </linearGradient>
                                         </defs>
                                         <Area
@@ -59,7 +59,7 @@ export default function MonitoringChart(props: MonitoringChartProps) {
                                             type="monotone"
                                             dataKey={key}
                                             stroke={config[key as keyof ChartConfig].color}
-                                            fillOpacity={1} fill={`url(${key})`}/>
+                                            fillOpacity={1} fill={`url(${key})`} />
                                     </>
                                 ))}
                                 {children}
@@ -73,7 +73,7 @@ export default function MonitoringChart(props: MonitoringChartProps) {
 };
 
 // @ts-ignore
-const CustomTooltip = ({active, payload, label}) => {
+const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         let title, name
 
@@ -97,7 +97,7 @@ const CustomTooltip = ({active, payload, label}) => {
 
         return (
             <div className="bg-neutral-200 border border-neutral-300 p-2 rounded">
-                <p className="text-sm">{`${getHour(label)}`}</p>
+                <p className="text-sm">{`${label}`}</p>
                 <div className={'flex justify-between gap-4'}>
                     <p className="text-xs">{title}</p>
                     <p className="text-xs">{`${payload[0].value.toFixed(1)} ${name !== undefined ? name : ''}`}</p>
