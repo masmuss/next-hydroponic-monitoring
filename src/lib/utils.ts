@@ -52,7 +52,39 @@ export function formatDateDifference(inputDate: string): string {
     return msToTime(timeDifference)
 }
 
+// Fungsi bantuan untuk klasifikasi pH
+const classifyPh = (ph: number): string => {
+    if (ph >= 0 && ph < 6.5) return "Asam";
+    if (ph >= 6.5 && ph <= 7) return "Optimal";
+    if (ph > 7 && ph <= 14) return "Basa";
+    return "Tidak Diketahui";
+};
+
+// Fungsi bantuan untuk klasifikasi TDS
+const classifyTds = (tds: number): string => {
+    if (tds >= 0 && tds < 600) return "Sangat Rendah";
+    if (tds >= 600 && tds < 1100) return "Rendah";
+    if (tds >= 1100 && tds < 2000) return "Optimal";
+    if (tds >= 2000 && tds <= 2500) return "Tinggi";
+    return "Tidak Diketahui";
+};
+
+// Fungsi bantuan untuk klasifikasi Temperatur Air
+const classifyWaterTemp = (temp: number): string => {
+    if (temp >= 0 && temp < 25) return "Dingin";
+    if (temp >= 25 && temp <= 30) return "Optimal";
+    if (temp > 30 && temp <= 45) return "Panas";
+    return "Tidak Diketahui";
+};
+
 export function exportDataToCSV(data: SensorMappedData[], worksheetName: string = "data") {
+    const dataWithClassification = data.map(row => ({
+        ...row,
+        ph_result: classifyPh(parseInt(row.ph.toString())),
+        tds_result: classifyTds(parseInt(row.tank_tds.toString())),
+        water_temp_result: classifyWaterTemp(parseInt(row.water_temp.toString())),
+    }));
+
     const convertToCSV = (objArray: SensorMappedData[]) => {
         if (!Array.isArray(objArray) || objArray.length === 0) return "";
 
@@ -74,7 +106,7 @@ export function exportDataToCSV(data: SensorMappedData[], worksheetName: string 
         return str;
     };
 
-    const csvData = new Blob([convertToCSV(data)], { type: 'text/csv;charset=utf-8;' });
+    const csvData = new Blob([convertToCSV(dataWithClassification)], { type: 'text/csv;charset=utf-8;' });
     const csvURL = window.URL.createObjectURL(csvData);
     const tempLink = document.createElement('a');
     tempLink.href = csvURL;
